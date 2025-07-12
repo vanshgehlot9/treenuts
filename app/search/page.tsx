@@ -4,6 +4,34 @@ import { Suspense } from "react"
 import { SearchResults } from "./search-results"
 
 export default function SearchPage() {
+  const searchParams = useSearchParams()
+  const query = searchParams.get('q') || ''
+  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    if (query) {
+      setIsLoading(true)
+      const allProducts = getAllProducts()
+      
+      const results = allProducts.filter(product => 
+        product.name.toLowerCase().includes(query.toLowerCase()) ||
+        product.description.toLowerCase().includes(query.toLowerCase()) ||
+        product.category.toLowerCase().includes(query.toLowerCase()) ||
+        product.features.some(feature => 
+          feature.toLowerCase().includes(query.toLowerCase())
+        )
+      )
+      
+      setSearchResults(results)
+      setIsLoading(false)
+    } else {
+      setSearchResults([])
+      setIsLoading(false)
+    }
+  }, [query])
+
+  if (!query) {
   return (
     <Suspense fallback={
       <div className="container mx-auto px-4 py-8">

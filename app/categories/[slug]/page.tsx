@@ -1,14 +1,8 @@
 import { notFound } from "next/navigation"
-import { getProductsByCategory, getCategories } from "@/lib/products"
+import { getAllProducts, getCategories } from "@/lib/products"
 import { ProductCard } from "@/components/product-card"
 import { Badge } from "@/components/ui/badge"
 import { Package, Star } from "lucide-react"
-
-interface CategoryPageProps {
-  params: {
-    slug: string
-  }
-}
 
 export async function generateStaticParams() {
   const categories = getCategories()
@@ -17,11 +11,12 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { slug } = await params
-  const products = getProductsByCategory(slug)
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
+  const { slug } = params
   const categories = getCategories()
   const currentCategory = categories.find(cat => cat.slug === slug)
+  const allProducts = await getAllProducts()
+  const products = allProducts.filter(p => p.category.toLowerCase() === slug.toLowerCase())
 
   if (!currentCategory || products.length === 0) {
     notFound()

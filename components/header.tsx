@@ -79,7 +79,7 @@ export function Header() {
               alt="Tree Nuts Logo" 
               width={40} 
               height={40}
-              className="group-hover:scale-110 transition-transform duration-300 rounded-lg"
+              className="group-hover:scale-110 transition-transform duration-300 rounded-lg w-10 h-auto"
             />
             <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 to-orange-500 rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
           </div>

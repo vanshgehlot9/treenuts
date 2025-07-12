@@ -92,9 +92,9 @@ export default function ContactPage() {
                 <div>
                   <p className="font-medium">Address</p>
                   <p className="text-sm text-muted-foreground">
-                    123 Umaid Heritage,
+                    Jata Bas,
                     <br />
-                    Paota, Jodhpur 342001,
+                    Ghanchiyo Ka Bass , Mahamandir , Jodhpur,
                     <br />
                     Rajasthan, India
                   </p>
@@ -105,7 +105,7 @@ export default function ContactPage() {
                 <Phone className="h-5 w-5 text-primary mt-1" />
                 <div>
                   <p className="font-medium">Phone</p>
-                  <p className="text-sm text-muted-foreground">+1 (555) 123-4567</p>
+                  <p className="text-sm text-muted-foreground">+91 9509401639</p>
                 </div>
               </div>
 
@@ -113,7 +113,7 @@ export default function ContactPage() {
                 <Mail className="h-5 w-5 text-primary mt-1" />
                 <div>
                   <p className="font-medium">Email</p>
-                  <p className="text-sm text-muted-foreground">info@treenuts.com</p>
+                  <p className="text-sm text-muted-foreground">info.treenuts@gmail.com</p>
                 </div>
               </div>
 

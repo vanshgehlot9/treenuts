@@ -10,15 +10,22 @@ import { Product } from "@/lib/products"
 import { useWishlist } from "@/components/wishlist-provider"
 import { useCart } from "@/components/cart-provider"
 import { useToast } from "@/hooks/use-toast"
+import { useState } from "react"
 
 interface ProductCardProps {
   product: Product
 }
 
+// Utility to strip HTML tags
+function stripHtml(html: string) {
+  return html.replace(/<[^>]+>/g, "");
+}
+
 export function ProductCard({ product }: ProductCardProps) {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
-  const { addToCart } = useCart()
+  const { addItem } = useCart()
   const { toast } = useToast()
+  // No variant selection in card view
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -48,15 +55,14 @@ export function ProductCard({ product }: ProductCardProps) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    
-    addToCart({
+    const price = product.variants && product.variants.length > 0 ? product.variants[0].price : product.price
+    addItem({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price,
       image: product.images[0],
       quantity: 1
     })
-    
     toast({
       title: "Added to cart",
       description: `${product.name} has been added to your cart.`,
@@ -72,7 +78,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
         <Link href={`/products/${product.id}`}>
           <Image
-            src={product.images[0] || "/placeholder.svg"}
+            src={Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : "/placeholder.svg"}
             alt={product.name}
             width={300}
             height={300}
@@ -123,7 +129,7 @@ export function ProductCard({ product }: ProductCardProps) {
               {product.name}
             </h3>
           </Link>
-          <p className="text-sm text-muted-foreground">{product.description}</p>
+          <p className="text-sm text-muted-foreground">{stripHtml(product.description)}</p>
 
           <div className="flex items-center space-x-1">
             <div className="flex">
@@ -143,11 +149,11 @@ export function ProductCard({ product }: ProductCardProps) {
 
           <div className="flex items-center space-x-2">
             <span className="text-xl font-bold text-primary ethnic-text">
-              ₹{(product.price / 100).toFixed(2)}
+              ₹{product.variants && product.variants.length > 0 ? product.variants[0].price : product.price}
             </span>
             {product.originalPrice && (
               <span className="text-sm text-muted-foreground line-through">
-                ₹{(product.originalPrice / 100).toFixed(2)}
+                ₹{product.originalPrice}
               </span>
             )}
           </div>

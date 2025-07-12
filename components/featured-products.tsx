@@ -1,11 +1,22 @@
+"use client";
+
 import Link from "next/link"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { getFeaturedProducts } from "@/lib/products"
+import { getAllProducts } from "@/lib/firebase"
 import { ProductCard } from "@/components/product-card"
 
-const featuredProducts = getFeaturedProducts()
-
 export function FeaturedProducts() {
+  const [featuredProducts, setFeaturedProducts] = useState([])
+
+  useEffect(() => {
+    async function fetchProducts() {
+      const allProducts = await getAllProducts()
+      setFeaturedProducts(allProducts.slice(0, 4)) // First 4 as featured
+    }
+    fetchProducts()
+  }, [])
+
   return (
     <section className="py-16 md:py-24 relative ethnic-gradient">
       {/* Traditional Background Pattern */}

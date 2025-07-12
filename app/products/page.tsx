@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -11,17 +11,29 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Filter, Search } from "lucide-react"
-import { getAllProducts, getCategories } from "@/lib/products"
+import { getAllProducts } from "@/lib/firebase"
 import { ProductCard } from "@/components/product-card"
 
-const products = getAllProducts()
-
 export default function ProductsPage() {
+  const [products, setProducts] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
   const [sortBy, setSortBy] = useState("featured")
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const categories = getCategories()
+  useEffect(() => {
+    setLoading(true)
+    getAllProducts().then(p => {
+      setProducts(p)
+      setLoading(false)
+    })
+  }, [])
+
+  // Dynamically generate categories from products
+  const categories = Array.from(new Set(products.map(p => p.category))).map(category => ({
+    slug: category?.toLowerCase().replace(/\s+/g, '-') || '',
+    name: category || ''
+  }))
 
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -53,7 +65,7 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="container px-4 py-8">
+    <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl font-playfair mb-4">All Products</h1>
         <p className="text-muted-foreground text-lg">
@@ -108,11 +120,24 @@ export default function ProductsPage() {
       </div>
 
       {/* Products Grid */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {sortedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="animate-pulse bg-white rounded-lg shadow p-4 h-80 flex flex-col justify-between">
+              <div className="bg-gray-200 h-40 w-full rounded mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
+              <div className="h-4 bg-gray-100 rounded w-1/3"></div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {sortedProducts.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      )}
 
       {sortedProducts.length === 0 && (
         <div className="text-center py-12">

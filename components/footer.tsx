@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react"
-import { TreeLogo } from "@/components/tree-logo"
+import Image from "next/image"
 
 export function Footer() {
   return (
@@ -10,7 +10,7 @@ export function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <TreeLogo size="sm" />
+              <Image src="/images/logo.jpeg" alt="Tree Nuts Logo" width={40} height={40} className="rounded-full" />
               <span className="text-lg font-bold font-playfair">Tree Nuts</span>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -47,38 +47,6 @@ export function Footer() {
               <li>
                 <Link href="/contact" className="text-muted-foreground hover:text-primary">
                   Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="text-muted-foreground hover:text-primary">
-                  Blog
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Categories */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold">Categories</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/categories/almonds" className="text-muted-foreground hover:text-primary">
-                  Almonds
-                </Link>
-              </li>
-              <li>
-                <Link href="/categories/walnuts" className="text-muted-foreground hover:text-primary">
-                  Walnuts
-                </Link>
-              </li>
-              <li>
-                <Link href="/categories/pistachios" className="text-muted-foreground hover:text-primary">
-                  Pistachios
-                </Link>
-              </li>
-              <li>
-                <Link href="/categories/dried-fruits" className="text-muted-foreground hover:text-primary">
-                  Dried Fruits
                 </Link>
               </li>
             </ul>

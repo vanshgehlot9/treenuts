@@ -16,45 +16,8 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
-
-// Mock order data
-const mockOrders = [
-  {
-    id: "ORD-001",
-    date: "2024-01-15",
-    status: "delivered",
-    total: 4497,
-    items: [
-      { name: "Tree Nuts Almonds", quantity: 1, price: 1999 },
-      { name: "Tree Nuts Dried Apricot", quantity: 1, price: 2498 }
-    ],
-    tracking: "TRK123456789",
-    address: "123 Main Street, Jodhpur, Rajasthan 342001"
-  },
-  {
-    id: "ORD-002",
-    date: "2024-01-10",
-    status: "shipped",
-    total: 1899,
-    items: [
-      { name: "Tree Nuts Black Currant", quantity: 1, price: 1899 }
-    ],
-    tracking: "TRK987654321",
-    address: "456 Oak Avenue, Jodhpur, Rajasthan 342002"
-  },
-  {
-    id: "ORD-003",
-    date: "2024-01-05",
-    status: "processing",
-    total: 1499,
-    items: [
-      { name: "Tree Nuts Amla Candy", quantity: 1, price: 1499 }
-    ],
-    tracking: null,
-    address: "789 Pine Road, Jodhpur, Rajasthan 342003"
-  }
-]
+import { useEffect, useState } from "react"
+import { getOrdersForUser } from "@/lib/firebase"
 
 const getStatusIcon = (status: string) => {
   switch (status) {
@@ -85,15 +48,29 @@ const getStatusBadge = (status: string) => {
 export default function OrdersPage() {
   const { user } = useAuth()
   const router = useRouter()
+  const [orders, setOrders] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!user) {
       router.push("/login")
+      return
     }
+    async function fetchOrders() {
+      setLoading(true)
+      const userOrders = await getOrdersForUser(user.email)
+      setOrders(userOrders)
+      setLoading(false)
+    }
+    fetchOrders()
   }, [user, router])
 
   if (!user) {
     return null
+  }
+
+  if (loading) {
+    return <div className="container mx-auto px-4 py-8 text-center">Loading orders...</div>
   }
 
   return (
@@ -114,7 +91,7 @@ export default function OrdersPage() {
 
         {/* Orders List */}
         <div className="space-y-6">
-          {mockOrders.map((order) => (
+          {orders.map((order) => (
             <Card key={order.id} className="border-amber-200 bg-gradient-to-b from-amber-50 to-orange-50">
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -131,7 +108,7 @@ export default function OrdersPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-semibold text-amber-700">
-                      ₹{(order.total / 100).toFixed(2)}
+                      ₹{order.total}
                     </div>
                     {getStatusBadge(order.status)}
                   </div>
@@ -146,10 +123,10 @@ export default function OrdersPage() {
                       {order.items.map((item, index) => (
                         <div key={index} className="flex justify-between text-sm">
                           <span className="text-gray-600">
-                            {item.name} × {item.quantity}
+                            {item.name} × {item.qty}
                           </span>
                           <span className="font-medium">
-                            ₹{(item.price / 100).toFixed(2)}
+                            ₹{item.price}
                           </span>
                         </div>
                       ))}
@@ -162,10 +139,10 @@ export default function OrdersPage() {
                       <MapPin className="h-4 w-4 mr-1" />
                       Shipping Address:
                     </h4>
-                    <p className="text-sm text-gray-600">{order.address}</p>
+                    <p className="text-sm text-gray-600">{order.buyer?.address}</p>
                   </div>
 
-                  {/* Tracking */}
+                  {/* Tracking (optional, if you add it to your order model) */}
                   {order.tracking && (
                     <div>
                       <h4 className="font-medium text-gray-700 mb-2">Tracking Number:</h4>
@@ -193,7 +170,7 @@ export default function OrdersPage() {
         </div>
 
         {/* Empty State */}
-        {mockOrders.length === 0 && (
+        {orders.length === 0 && !loading && (
           <Card className="border-amber-200 bg-gradient-to-b from-amber-50 to-orange-50">
             <CardContent className="text-center py-12">
               <ShoppingBag className="h-16 w-16 text-gray-400 mx-auto mb-4" />
