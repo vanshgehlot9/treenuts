@@ -13,6 +13,13 @@ const categoryImages: Record<string, string> = {
 }
 const defaultImage = "/images/logo.jpeg"
 
+const categorySlugs: Record<string, string> = {
+  "Dry Fruits & Nuts": "dry-fruits-and-nuts",
+  "Seeds": "seeds",
+  "Spices": "spices",
+  // Add more mappings as needed
+};
+
 export function CategorySection() {
   const [categories, setCategories] = useState<{ name: string; count: number }[]>([])
 
@@ -48,7 +55,7 @@ export function CategorySection() {
               <h3 className="text-2xl font-semibold mb-4 text-center ethnic-text">{cat.name}</h3>
               <div className="mb-2 text-sm text-gray-500">{cat.count} product{cat.count !== 1 ? "s" : ""}</div>
               <Button asChild className="btn-traditional px-8 py-3 text-lg font-semibold mt-auto">
-                <Link href={`/categories/${cat.name.toLowerCase().replace(/\s+/g, "-")}`}>Shop Now</Link>
+                <Link href={`/categories/${categorySlugs[cat.name] || cat.name.toLowerCase().replace(/\s+/g, "-")}`}>Shop Now</Link>
               </Button>
             </div>
           ))}

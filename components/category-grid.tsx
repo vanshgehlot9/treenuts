@@ -39,6 +39,18 @@ const categories = [
     href: "/categories/mixed-nuts",
     count: 7,
   },
+  {
+    name: "Dry Fruits & Nuts",
+    image: "/placeholder.svg?height=200&width=200",
+    href: "/categories/dry-fruits-and-nuts",
+    count: 5,
+  },
+  {
+    name: "Seeds",
+    image: "/placeholder.svg?height=200&width=200",
+    href: "/categories/seeds",
+    count: 3,
+  },
 ]
 
 export function CategoryGrid() {

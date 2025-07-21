@@ -1,25 +1,29 @@
 import { notFound } from "next/navigation"
-import { getAllProducts, getCategories } from "@/lib/products"
+import { getAllProducts } from "@/lib/firebase"
 import { ProductCard } from "@/components/product-card"
 import { Badge } from "@/components/ui/badge"
 import { Package, Star } from "lucide-react"
 
 export async function generateStaticParams() {
-  const categories = getCategories()
-  return categories.map((category) => ({
-    slug: category.slug,
-  }))
+  const products = await getAllProducts();
+  const uniqueSlugs = Array.from(new Set(products.map(p => p.category.toLowerCase().replace(/\s+/g, "-").replace(/&/g, "and"))));
+  return uniqueSlugs.map(slug => ({ slug }));
 }
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
-  const { slug } = params
-  const categories = getCategories()
-  const currentCategory = categories.find(cat => cat.slug === slug)
-  const allProducts = await getAllProducts()
-  const products = allProducts.filter(p => p.category.toLowerCase() === slug.toLowerCase())
+export default async function CategoryPage({ params }: { params: { slug: string } } | { params: Promise<{ slug: string }> }) {
+  // Await params if it's a Promise (for Next.js streaming)
+  const resolvedParams = typeof params.then === 'function' ? await params : params;
+  const { slug } = resolvedParams;
 
-  if (!currentCategory || products.length === 0) {
-    notFound()
+  const allProducts = await getAllProducts();
+  // Find products matching the slug (normalize category name to slug)
+  const products = allProducts.filter(p => {
+    const catSlug = p.category.toLowerCase().replace(/\s+/g, "-").replace(/&/g, "and");
+    return catSlug === slug;
+  });
+  const currentCategoryName = products.length > 0 ? products[0].category : slug;
+  if (products.length === 0) {
+    notFound();
   }
 
   return (
@@ -29,11 +33,11 @@ export default async function CategoryPage({ params }: { params: { slug: string 
         <div className="flex items-center justify-center mb-4">
           <Package className="h-8 w-8 text-amber-600 mr-3" />
           <h1 className="text-4xl font-bold font-playfair ethnic-text bg-gradient-to-r from-amber-700 to-orange-700 bg-clip-text text-transparent">
-            {currentCategory.name}
+            {currentCategoryName}
           </h1>
         </div>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Discover our premium collection of {currentCategory.name.toLowerCase()}. 
+          Discover our premium collection of {currentCategoryName.toLowerCase()}. 
           Each product is carefully selected for quality, taste, and nutritional value.
         </p>
         <div className="flex items-center justify-center mt-4 space-x-4">

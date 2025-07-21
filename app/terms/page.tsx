@@ -120,7 +120,7 @@ export default function TermsPage() {
             </p>
             <div className="bg-muted/50 rounded-lg p-4 mt-3">
               <p className="text-muted-foreground">
-                <strong>Email:</strong> info@treenuts.com<br />
+                <strong>Email:</strong> treenuts09@gmail.com<br />
                 <strong>Phone:</strong> +1 (555) 123-4567<br />
                 <strong>Address:</strong> 123 Umaid Heritage, Paota, Jodhpur 342001, Rajasthan, India
               </p>

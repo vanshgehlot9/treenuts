@@ -42,6 +42,36 @@ export default function CheckoutPage() {
     cardName: ""
   })
 
+  const [fromPincode, setFromPincode] = useState("");
+  const [toPincode, setToPincode] = useState("");
+  const [weight, setWeight] = useState(1);
+  const [orderType, setOrderType] = useState("forward");
+  const [rates, setRates] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetchRates = async () => {
+    setLoading(true);
+    // 1. Get NimbusPost token
+    const authRes = await fetch("/api/nimbuspost/auth", { method: "POST" });
+    const { token } = await authRes.json();
+
+    // 2. Fetch rates
+    const ratesRes = await fetch("/api/nimbuspost/rates", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from_pincode: fromPincode,
+        to_pincode: toPincode,
+        weight,
+        order_type: orderType,
+        token,
+      }),
+    });
+    const data = await ratesRes.json();
+    setRates(data);
+    setLoading(false);
+  };
+
   useEffect(() => {
     async function fetchProfile() {
       if (user) {

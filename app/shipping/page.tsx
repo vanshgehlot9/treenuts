@@ -241,7 +241,7 @@ export default function ShippingPage() {
                 <div>
                   <h3 className="font-semibold mb-2">Contact Information</h3>
                   <p className="text-sm text-muted-foreground">
-                    <strong>Email:</strong> shipping@treenuts.com<br />
+                    <strong>Email:</strong> treenuts09@gmail.com<br />
                     <strong>Phone:</strong> +1 (555) 123-4567<br />
                     <strong>Hours:</strong> Mon-Fri 9AM-6PM IST
                   </p>

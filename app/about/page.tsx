@@ -40,12 +40,11 @@ const values = [
 export default function AboutPage() {
   return (
     <div className="container px-4 py-8">
-      {/* Hero Section */}
       <section className="text-center py-16 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl ethnic-pattern mb-16">
-        <div className="max-w-3xl mx-auto space-y-6">
-          <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl font-playfair">Our Story</h1>
+        <div className="max-w-2xl mx-auto space-y-6">
+          <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl font-playfair">About Us</h1>
           <p className="text-xl text-muted-foreground">
-            Three generations of passion for bringing you the world's finest nuts and dried fruits
+            Tree Nuts brings you the finest nuts and dried fruits, handpicked for quality and taste. Three generations of passion, one promise: pure, delicious goodness in every bite.
           </p>
         </div>
       </section>

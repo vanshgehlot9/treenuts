@@ -62,7 +62,7 @@ export function Footer() {
               </li>
               <li className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-muted-foreground" />
-                <span className="text-muted-foreground">info.treenuts@gmail.com</span>
+                <span className="text-muted-foreground">treenuts09@gmail.com</span>
               </li>
               <li className="flex items-start space-x-2">
                 <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
@@ -79,7 +79,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 border-t pt-8 flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-xs text-muted-foreground">© 2024 Tree Nuts. All rights reserved.</p>
+          <p className="text-xs text-muted-foreground">© 2025 Tree Nuts. All rights reserved.</p>
           <div className="flex space-x-4 text-xs text-muted-foreground mt-4 sm:mt-0">
             <Link href="/privacy" className="hover:text-primary">
               Privacy Policy
